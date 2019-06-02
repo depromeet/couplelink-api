@@ -63,7 +63,7 @@ public class Member {
                 .map(Couple::getId);
     }
 
-    public Boolean isSolo() {
+    public boolean isSolo() {
         return couple == null;
     }
 }

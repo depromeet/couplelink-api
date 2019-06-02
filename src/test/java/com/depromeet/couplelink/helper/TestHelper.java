@@ -1,6 +1,7 @@
 package com.depromeet.couplelink.helper;
 
 import com.depromeet.couplelink.adapter.KakaoAdapter;
+import com.depromeet.couplelink.dto.CoupleRequest;
 import com.depromeet.couplelink.dto.LoginRequest;
 import com.depromeet.couplelink.dto.kakao.KakaoUserResponse;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -35,5 +36,11 @@ public final class TestHelper {
         final LoginRequest loginRequest = new LoginRequest();
         ReflectionTestUtils.setField(loginRequest, "accessToken", accessToken);
         return loginRequest;
+    }
+
+    public static CoupleRequest createCoupleRequest(Long memberId) {
+        final CoupleRequest coupleRequest = new CoupleRequest();
+        ReflectionTestUtils.setField(coupleRequest, "memberId", memberId);
+        return coupleRequest;
     }
 }

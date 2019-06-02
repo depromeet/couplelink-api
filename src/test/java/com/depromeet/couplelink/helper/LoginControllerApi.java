@@ -8,7 +8,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public final class LoginControllerApi extends AbstractControllerApi {
     public LoginControllerApi(MockMvc mockMvc, ObjectMapper objectMapper) {
@@ -19,7 +18,6 @@ public final class LoginControllerApi extends AbstractControllerApi {
         final MvcResult mvcResult = mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isOk())
                 .andReturn();
         return new TestApiResult(mvcResult, objectMapper, LoginResponse.class);
     }

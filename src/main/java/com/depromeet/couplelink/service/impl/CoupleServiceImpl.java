@@ -39,7 +39,10 @@ public class CoupleServiceImpl implements CoupleService {
         final Couple couple = new Couple();
         couple.setChatRoom(chatRoom);
         couple.setMembers(Arrays.asList(me, you));
-        return coupleRepository.save(couple);
+        coupleRepository.save(couple);
+        me.setCouple(couple);
+        you.setCouple(couple);
+        return couple;
     }
 
     @Override

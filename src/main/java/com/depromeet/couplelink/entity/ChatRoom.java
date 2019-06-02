@@ -20,7 +20,8 @@ public class ChatRoom {
     /**
      * 커플 정보
      */
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "chatRoom")
+    @OneToOne
+    @JoinColumn(name = "couple_id")
     private Couple couple;
 
     /**

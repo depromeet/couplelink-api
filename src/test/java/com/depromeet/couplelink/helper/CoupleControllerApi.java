@@ -20,6 +20,7 @@ public final class CoupleControllerApi extends AbstractControllerApi {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(coupleRequest)))
                 .andReturn();
+
         return new TestApiResult<>(mvcResult, objectMapper, CoupleResponse.class);
     }
 }

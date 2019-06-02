@@ -30,8 +30,7 @@ public class Couple {
     /**
      * 채팅방 아이디
      */
-    @OneToOne
-    @JoinColumn(name = "chat_room_id", nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "couple")
     private ChatRoom chatRoom;
 
     /**
