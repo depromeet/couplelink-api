@@ -24,6 +24,7 @@ public class CoupleAssembler {
                 .map(memberAssembler::assembleMemberResponse)
                 .collect(Collectors.toList()));
         coupleResponse.setChatRoomResponse(chatRoomAssembler.assembleChatRoomResponse(couple.getChatRoom()));
+        coupleResponse.setConnectionStatus(couple.getConnectionStatus());
         coupleResponse.setStartedAt(couple.getStartedAt());
         return coupleResponse;
     }

@@ -3,8 +3,12 @@ package com.depromeet.couplelink.helper;
 import com.depromeet.couplelink.adapter.KakaoAdapter;
 import com.depromeet.couplelink.dto.CoupleRequest;
 import com.depromeet.couplelink.dto.LoginRequest;
+import com.depromeet.couplelink.dto.UpdateCoupleMemberRequest;
 import com.depromeet.couplelink.dto.kakao.KakaoUserResponse;
+import com.depromeet.couplelink.model.stereotype.GenderType;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -42,5 +46,19 @@ public final class TestHelper {
         final CoupleRequest coupleRequest = new CoupleRequest();
         ReflectionTestUtils.setField(coupleRequest, "memberId", memberId);
         return coupleRequest;
+    }
+
+    public static UpdateCoupleMemberRequest createUpdateCoupleMemberRequest(String name,
+                                                                            GenderType genderType,
+                                                                            String profileImageUrl,
+                                                                            LocalDateTime birthDate,
+                                                                            LocalDateTime startedAt) {
+        final UpdateCoupleMemberRequest request = new UpdateCoupleMemberRequest();
+        ReflectionTestUtils.setField(request, "name", name);
+        ReflectionTestUtils.setField(request, "genderType", genderType);
+        ReflectionTestUtils.setField(request, "profileImageUrl", profileImageUrl);
+        ReflectionTestUtils.setField(request, "birthDate", birthDate);
+        ReflectionTestUtils.setField(request, "startedAt", startedAt);
+        return request;
     }
 }

@@ -1,9 +1,9 @@
 package com.depromeet.couplelink.controller;
 
 import com.depromeet.couplelink.assembler.CoupleAssembler;
-import com.depromeet.couplelink.dto.CoupleMemberRequest;
 import com.depromeet.couplelink.dto.CoupleRequest;
 import com.depromeet.couplelink.dto.CoupleResponse;
+import com.depromeet.couplelink.dto.UpdateCoupleMemberRequest;
 import com.depromeet.couplelink.entity.Couple;
 import com.depromeet.couplelink.service.CoupleService;
 import lombok.RequiredArgsConstructor;
@@ -55,10 +55,11 @@ public class CoupleController {
      * 커플의 내 정보를 수정합니다.
      */
     @PutMapping("/api/couples/{coupleId:\\d+}/members/me")
-    public CoupleResponse addMember(@ApiIgnore @RequestAttribute Long memberId,
-                                    @RequestHeader("Authorization") String authorization,
-                                    @PathVariable Long coupleId,
-                                    @RequestBody CoupleMemberRequest coupleMemberRequest) {
-        return new CoupleResponse();
+    public CoupleResponse updateCoupleMember(@ApiIgnore @RequestAttribute Long memberId,
+                                             @RequestHeader("Authorization") String authorization,
+                                             @PathVariable Long coupleId,
+                                             @RequestBody @Valid UpdateCoupleMemberRequest updateCoupleMemberRequest) {
+        final Couple couple = coupleService.createOrUpdateMemberDetail(memberId, coupleId, updateCoupleMemberRequest);
+        return coupleAssembler.assembleCoupleResponse(couple);
     }
 }

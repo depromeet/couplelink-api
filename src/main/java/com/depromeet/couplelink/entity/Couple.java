@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NamedEntityGraph(name = "coupleWithMembers", attributeNodes = @NamedAttributeNode("members"))
 @Entity
@@ -53,4 +54,17 @@ public class Couple {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public void updateConnectionStatus() {
+        if (connectionStatus == ConnectionStatus.CONNECTED) {
+            return;
+        }
+        long numberOfMemberDetails = members.stream()
+                .map(Member::getMemberDetail)
+                .filter(Objects::nonNull)
+                .count();
+        if (numberOfMemberDetails == 2L) {
+            connectionStatus = ConnectionStatus.CONNECTED;
+        }
+    }
 }

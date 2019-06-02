@@ -1,11 +1,13 @@
 package com.depromeet.couplelink.service.impl;
 
+import com.depromeet.couplelink.dto.UpdateCoupleMemberRequest;
 import com.depromeet.couplelink.entity.ChatRoom;
 import com.depromeet.couplelink.entity.Couple;
 import com.depromeet.couplelink.entity.Member;
 import com.depromeet.couplelink.entity.MemberDetail;
 import com.depromeet.couplelink.exception.ApiFailedException;
 import com.depromeet.couplelink.repository.CoupleRepository;
+import com.depromeet.couplelink.repository.MemberDetailRepository;
 import com.depromeet.couplelink.repository.MemberRepository;
 import com.depromeet.couplelink.service.CoupleService;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CoupleServiceImpl implements CoupleService {
     private final MemberRepository memberRepository;
     private final CoupleRepository coupleRepository;
+    private final MemberDetailRepository memberDetailRepository;
 
     @Override
     @Transactional
@@ -47,7 +51,21 @@ public class CoupleServiceImpl implements CoupleService {
 
     @Override
     @Transactional
-    public Couple addMember(Long memberId, MemberDetail memberDetail) {
-        return null;
+    public Couple createOrUpdateMemberDetail(Long memberId, Long coupleId, UpdateCoupleMemberRequest updateCoupleMemberRequest) {
+        final Couple couple = coupleRepository.findById(coupleId)
+                .orElseThrow(() -> new ApiFailedException("Couple not found", HttpStatus.NOT_FOUND));
+        final Member member = couple.getMembers().stream()
+                .filter(m -> memberId.equals(m.getId()))
+                .findFirst()
+                .orElseThrow(() -> new ApiFailedException("Member not found from couple. memberId:" + memberId + ", coupleId: " + coupleId, HttpStatus.BAD_REQUEST));
+        final MemberDetail memberDetail = Optional.ofNullable(member.getMemberDetail()).orElse(new MemberDetail());
+        memberDetail.setName(updateCoupleMemberRequest.getName());
+        memberDetail.setGenderType(updateCoupleMemberRequest.getGenderType());
+        memberDetail.setProfileImageUrl(updateCoupleMemberRequest.getProfileImageUrl());
+        memberDetail.setBirthDate(updateCoupleMemberRequest.getBirthDate());
+        member.setMemberDetail(memberDetail);
+        couple.setStartedAt(updateCoupleMemberRequest.getStartedAt());
+        couple.updateConnectionStatus();
+        return couple;
     }
 }
