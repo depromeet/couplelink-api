@@ -12,4 +12,10 @@ public class LoginResponse {
      */
     @JsonProperty("accessToken")
     private String accessToken;
+
+    public static LoginResponse from(String accessToken) {
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.accessToken = accessToken;
+        return loginResponse;
+    }
 }

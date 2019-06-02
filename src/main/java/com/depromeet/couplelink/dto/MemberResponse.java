@@ -2,11 +2,9 @@ package com.depromeet.couplelink.dto;
 
 import com.depromeet.couplelink.model.MemberStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@ToString
+@Data
 public class MemberResponse {
     /**
      * 회원 아이디
@@ -31,6 +29,12 @@ public class MemberResponse {
      */
     @JsonProperty("connectionNumber")
     private String connectionNumber;
+
+    /**
+     * 프로필 이미지 url
+     */
+    @JsonProperty("profileImageUrl")
+    private String profileImageUrl;
 
     /**
      * 커플 아이디, 솔로이면 null

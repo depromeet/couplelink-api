@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -21,6 +22,12 @@ public class Member {
      * 회원 이름
      */
     private String name;
+
+    /**
+     * 프로필 이미지 url
+     */
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
 
     /**
      * 인증 제공자 정보
@@ -55,4 +62,9 @@ public class Member {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Optional<Long> getCoupleId() {
+        return Optional.ofNullable(couple)
+                .map(Couple::getId);
+    }
 }
