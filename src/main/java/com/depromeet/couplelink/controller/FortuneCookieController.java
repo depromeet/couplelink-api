@@ -1,16 +1,28 @@
 package com.depromeet.couplelink.controller;
 
-import com.depromeet.couplelink.dto.FortuneCookieRequest;
+import com.depromeet.couplelink.assembler.FortuneCookieAssembler;
+import com.depromeet.couplelink.dto.CreateFortuneCookieRequest;
 import com.depromeet.couplelink.dto.FortuneCookieResponse;
+import com.depromeet.couplelink.entity.FortuneCookie;
+import com.depromeet.couplelink.model.stereotype.WriterType;
+import com.depromeet.couplelink.service.FortuneCookieService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 public class FortuneCookieController {
+    private final FortuneCookieService fortuneCookieService;
+    private final FortuneCookieAssembler fortuneCookieAssembler;
+
     /**
      * 쿠키 목록 조회
      */
@@ -18,10 +30,13 @@ public class FortuneCookieController {
     public List<FortuneCookieResponse> getCookies(@ApiIgnore @RequestAttribute Long memberId,
                                                   @RequestHeader("Authorization") String authorization,
                                                   @PathVariable Long coupleId,
-                                                  @RequestParam List<String> writer,
+                                                  @RequestParam(name = "writer", defaultValue = "ALL") WriterType writerType,
                                                   @RequestParam(defaultValue = "0") Integer page,
                                                   @RequestParam(defaultValue = "20") Integer size) {
-        return new ArrayList<>();
+        final Pageable pageable = PageRequest.of(page, size);
+        return fortuneCookieService.getCookies(memberId, coupleId, writerType, pageable).stream()
+                .map(fortuneCookieAssembler::assembleFortuneCookieResponse)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -32,7 +47,8 @@ public class FortuneCookieController {
                                            @RequestHeader("Authorization") String authorization,
                                            @PathVariable Long coupleId,
                                            @PathVariable Long cookieId) {
-        return new FortuneCookieResponse();
+        final FortuneCookie fortuneCookie = fortuneCookieService.getCookie(memberId, coupleId, cookieId);
+        return fortuneCookieAssembler.assembleFortuneCookieResponse(fortuneCookie);
     }
 
     /**
@@ -42,8 +58,10 @@ public class FortuneCookieController {
     @ResponseStatus(HttpStatus.CREATED)
     public FortuneCookieResponse createCookie(@ApiIgnore @RequestAttribute Long memberId,
                                               @RequestHeader("Authorization") String authorization,
-                                              @RequestBody FortuneCookieRequest fortuneCookieRequest) {
-        return new FortuneCookieResponse();
+                                              @PathVariable Long coupleId,
+                                              @RequestBody @Valid CreateFortuneCookieRequest createFortuneCookieRequest) {
+        final FortuneCookie fortuneCookie = fortuneCookieService.createCookie(memberId, coupleId, createFortuneCookieRequest);
+        return fortuneCookieAssembler.assembleFortuneCookieResponse(fortuneCookie);
     }
 
     /**
@@ -55,7 +73,7 @@ public class FortuneCookieController {
                              @RequestHeader("Authorization") String authorization,
                              @PathVariable Long coupleId,
                              @PathVariable Long cookieId) {
-
+        fortuneCookieService.deleteCookie(memberId, coupleId, cookieId);
     }
 
     /**
@@ -66,6 +84,7 @@ public class FortuneCookieController {
                                             @RequestHeader("Authorization") String authorization,
                                             @PathVariable Long coupleId,
                                             @PathVariable Long cookieId) {
-        return new FortuneCookieResponse();
+        final FortuneCookie fortuneCookie = fortuneCookieService.setCookieAsRead(memberId, coupleId, cookieId);
+        return fortuneCookieAssembler.assembleFortuneCookieResponse(fortuneCookie);
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -66,5 +67,14 @@ public class Couple {
         if (numberOfMemberDetails == 2L) {
             connectionStatus = ConnectionStatus.CONNECTED;
         }
+    }
+
+    public Long getYourMemberId(Long myMemberId) {
+        Assert.notNull(myMemberId, "'myMemberId' must not be null");
+        return members.stream()
+                .map(Member::getId)
+                .filter(id -> !myMemberId.equals(id))
+                .findFirst()
+                .orElse(null);
     }
 }

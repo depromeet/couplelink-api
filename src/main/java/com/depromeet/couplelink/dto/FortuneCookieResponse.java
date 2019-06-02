@@ -2,13 +2,13 @@ package com.depromeet.couplelink.dto;
 
 import com.depromeet.couplelink.model.ReadStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Getter
-@ToString
+@Data
 public class FortuneCookieResponse {
     /**
      * 쿠키 아이디
@@ -26,7 +26,7 @@ public class FortuneCookieResponse {
      * 쿠키 쓴 사람
      */
     @JsonProperty("writer")
-    private MemberResponse memberResponse;
+    private MemberResponse writerMemberResponse;
 
     /**
      * 쿠키 생성 시간
