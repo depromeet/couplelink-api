@@ -1,14 +1,12 @@
 package com.depromeet.couplelink.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@ToString
+@Data
 public class CoupleResponse {
     /**
      * 커플 아이디

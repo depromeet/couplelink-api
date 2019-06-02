@@ -1,13 +1,24 @@
 package com.depromeet.couplelink.controller;
 
+import com.depromeet.couplelink.assembler.CoupleAssembler;
+import com.depromeet.couplelink.dto.CoupleMemberRequest;
 import com.depromeet.couplelink.dto.CoupleRequest;
 import com.depromeet.couplelink.dto.CoupleResponse;
+import com.depromeet.couplelink.entity.Couple;
+import com.depromeet.couplelink.service.CoupleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
+
 @RestController
+@RequiredArgsConstructor
 public class CoupleController {
+    private final CoupleService coupleService;
+    private final CoupleAssembler coupleAssembler;
+
     /**
      * 상대방의 연결 번호를 입력하고, 그 상대와 커플이 됩니다.
      * 내가 이미 커플인 경우 400
@@ -21,8 +32,10 @@ public class CoupleController {
     @ResponseStatus(HttpStatus.CREATED)
     public CoupleResponse createCouple(@ApiIgnore @RequestAttribute Long memberId,
                                        @RequestHeader("Authorization") String authorization,
-                                       @RequestBody CoupleRequest coupleRequest) {
-        return new CoupleResponse();
+                                       @RequestBody @Valid CoupleRequest coupleRequest) {
+        final Long targetMemberId = coupleRequest.getMemberId();
+        final Couple couple = coupleService.createCouple(memberId, targetMemberId);
+        return coupleAssembler.assembleCoupleResponse(couple);
     }
 
     /**
@@ -35,6 +48,17 @@ public class CoupleController {
     public CoupleResponse getCouple(@ApiIgnore @RequestAttribute Long memberId,
                                     @RequestHeader("Authorization") String authorization,
                                     @PathVariable Long coupleId) {
+        return new CoupleResponse();
+    }
+
+    /**
+     * 커플의 내 정보를 수정합니다.
+     */
+    @PutMapping("/api/couples/{coupleId:\\d+}/members/me")
+    public CoupleResponse addMember(@ApiIgnore @RequestAttribute Long memberId,
+                                    @RequestHeader("Authorization") String authorization,
+                                    @PathVariable Long coupleId,
+                                    @RequestBody CoupleMemberRequest coupleMemberRequest) {
         return new CoupleResponse();
     }
 }

@@ -1,11 +1,9 @@
 package com.depromeet.couplelink.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@ToString
+@Data
 public class ChatRoomResponse {
     /**
      * 채팅방 아이디

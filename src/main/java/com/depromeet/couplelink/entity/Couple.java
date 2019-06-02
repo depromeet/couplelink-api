@@ -1,5 +1,6 @@
 package com.depromeet.couplelink.entity;
 
+import com.depromeet.couplelink.model.stereotype.ConnectionStatus;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -32,6 +33,13 @@ public class Couple {
     @OneToOne
     @JoinColumn(name = "chat_room_id", nullable = true)
     private ChatRoom chatRoom;
+
+    /**
+     * 가입 상태 (연결 중, 연결 완료)
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "connection_status")
+    private ConnectionStatus connectionStatus = ConnectionStatus.CONNECTING;
 
     /**
      * 기념일 (만나기 시작한 날)

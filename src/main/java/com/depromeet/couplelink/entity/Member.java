@@ -19,17 +19,6 @@ public class Member {
     private Long id;
 
     /**
-     * 회원 이름
-     */
-    private String name;
-
-    /**
-     * 프로필 이미지 url
-     */
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
-
-    /**
      * 인증 제공자 정보
      */
     @Enumerated(EnumType.STRING)
@@ -45,7 +34,7 @@ public class Member {
     /**
      * 커플로 상대방을 연결할 때 사용하는 번호
      */
-    @Column(name = "connection_number")
+    @Column(name = "connection_number", unique = true)
     private String connectionNumber;
 
     /**
@@ -54,6 +43,12 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "couple_id")
     private Couple couple;
+
+    /**
+     * 멤버 상세 정보
+     */
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "member")
+    private MemberDetail memberDetail;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -66,5 +61,9 @@ public class Member {
     public Optional<Long> getCoupleId() {
         return Optional.ofNullable(couple)
                 .map(Couple::getId);
+    }
+
+    public Boolean isSolo() {
+        return couple == null;
     }
 }

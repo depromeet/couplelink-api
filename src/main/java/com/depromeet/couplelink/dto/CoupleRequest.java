@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @ToString
 public class CoupleRequest {
     /**
-     * 상대방 연결 번호
+     * 상대방 회원 번호
      */
-    @JsonProperty("connectionNumber")
-    private String connectionNumber;
+    @JsonProperty("memberId")
+    @NotNull
+    private Long memberId;
 }

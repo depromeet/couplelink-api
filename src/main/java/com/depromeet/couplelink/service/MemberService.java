@@ -4,5 +4,8 @@ import com.depromeet.couplelink.entity.Member;
 
 public interface MemberService {
     Member getOrCreateMember(String accessToken);
+
     Member getMemberById(Long memberId);
+
+    Member getMemberForConnecting(Long memberId, String connectionNumber);
 }
