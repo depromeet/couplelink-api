@@ -26,9 +26,14 @@ public class CoupleServiceImpl implements CoupleService {
     public Couple createCouple(Long memberId, Long targetMemberId) {
         final Member me = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApiFailedException("Member not found. memberId:" + memberId, HttpStatus.NOT_FOUND));
+        if (!me.isSolo()) {
+            throw new ApiFailedException("Member is already couple. memberId:" + me.getId(), HttpStatus.BAD_REQUEST);
+        }
         final Member you = memberRepository.findById(targetMemberId)
                 .orElseThrow(() -> new ApiFailedException("Member not found. memberId:" + targetMemberId, HttpStatus.NOT_FOUND));
-
+        if (!you.isSolo()) {
+            throw new ApiFailedException("Member is already couple. memberId:" + you.getId(), HttpStatus.BAD_REQUEST);
+        }
         final ChatRoom chatRoom = new ChatRoom();
 
         final Couple couple = new Couple();
