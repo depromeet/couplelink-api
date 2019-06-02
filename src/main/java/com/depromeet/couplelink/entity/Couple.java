@@ -1,5 +1,6 @@
 package com.depromeet.couplelink.entity;
 
+import com.depromeet.couplelink.model.stereotype.ConnectionStatus;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NamedEntityGraph(name = "coupleWithMembers", attributeNodes = @NamedAttributeNode("members"))
 @Entity
@@ -29,9 +31,15 @@ public class Couple {
     /**
      * 채팅방 아이디
      */
-    @OneToOne
-    @JoinColumn(name = "chat_room_id", nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "couple")
     private ChatRoom chatRoom;
+
+    /**
+     * 가입 상태 (연결 중, 연결 완료)
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "connection_status")
+    private ConnectionStatus connectionStatus = ConnectionStatus.CONNECTING;
 
     /**
      * 기념일 (만나기 시작한 날)
@@ -46,4 +54,17 @@ public class Couple {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public void updateConnectionStatus() {
+        if (connectionStatus == ConnectionStatus.CONNECTED) {
+            return;
+        }
+        long numberOfMemberDetails = members.stream()
+                .map(Member::getMemberDetail)
+                .filter(Objects::nonNull)
+                .count();
+        if (numberOfMemberDetails == 2L) {
+            connectionStatus = ConnectionStatus.CONNECTED;
+        }
+    }
 }

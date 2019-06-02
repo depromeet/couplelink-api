@@ -1,5 +1,6 @@
 package com.depromeet.couplelink.entity;
 
+import com.depromeet.couplelink.model.stereotype.GenderType;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,23 +12,42 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class ChatRoom {
+public class MemberDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "chat_room_id")
+    @Column(name = "member_detail_id")
     private Long id;
 
     /**
-     * 커플 정보
-     */
-    @OneToOne
-    @JoinColumn(name = "couple_id")
-    private Couple couple;
-
-    /**
-     * 채팅방 이름
+     * 이름
      */
     private String name;
+
+    /**
+     * 성별
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender_type")
+    private GenderType genderType;
+
+    /**
+     * 생일
+     */
+    @Column(name = "birth_date")
+    private LocalDateTime birthDate;
+
+    /**
+     * 프로필 이미지 url
+     */
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
+    /**
+     * 멤버 정보
+     */
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @CreatedDate
     @Column(name = "created_at")
