@@ -1,5 +1,6 @@
 package com.depromeet.couplelink.entity;
 
+import com.depromeet.couplelink.model.ReadStatus;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,28 +12,36 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class FortuneCookie {
+public class FortuneCookieReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "fortune_cookie_id")
+    @Column(name = "fortune_cookie_receipt_id")
     private Long id;
 
     /**
-     * 커플 아이디
+     * 쿠키 받는 사람 (= 읽는 사람)
+     */
+    @Column(name = "reader_member_id")
+    private Long readerMemberId;
+
+    /**
+     * 커플 아이디 (반정규화)
      */
     @Column(name = "couple_id")
     private Long coupleId;
 
     /**
-     * 쿠키 쓴 사람
+     * 읽음 여부
      */
-    @Column(name = "writer_member_id")
-    private Long writerMemberId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "read_status")
+    private ReadStatus status;
 
     /**
-     * 내용
+     * 읽은 시간
      */
-    private String message;
+    @Column(name = "read_at")
+    private LocalDateTime readAt;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -43,8 +52,9 @@ public class FortuneCookie {
     private LocalDateTime updatedAt;
 
     /**
-     * 쿠키 읽음 정보
+     * 쿠키 정보
      */
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "fortuneCookie")
-    private FortuneCookieReceipt fortuneCookieReceipt;
+    @OneToOne
+    @JoinColumn(name = "fortune_cookie_id", nullable = false)
+    private FortuneCookie fortuneCookie;
 }
