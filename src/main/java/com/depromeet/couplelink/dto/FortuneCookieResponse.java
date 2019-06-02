@@ -1,5 +1,6 @@
 package com.depromeet.couplelink.dto;
 
+import com.depromeet.couplelink.model.ReadStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
@@ -32,4 +33,16 @@ public class FortuneCookieResponse {
      */
     @JsonProperty("createdAt")
     private LocalDateTime createdAt;
+
+    /**
+     * (상대가) 쿠키 읽음 여부
+     */
+    @JsonProperty("status")
+    private ReadStatus readStatus;
+
+    /**
+     * (상대가) 쿠키 읽은 시간
+     */
+    @JsonProperty("readAt")
+    private LocalDateTime readAt;
 }

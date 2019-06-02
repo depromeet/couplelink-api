@@ -48,4 +48,13 @@ public class FortuneCookieController {
                              @PathVariable Long cookieId) {
 
     }
+
+    /**
+     * 쿠키 읽음 처리
+     */
+    @PostMapping("/api/couples/{coupleId:\\d+}/cookies/{cookieId:\\d+}/read")
+    public FortuneCookieResponse readCookie(@PathVariable Long coupleId,
+                                            @PathVariable Long cookieId) {
+        return new FortuneCookieResponse();
+    }
 }
