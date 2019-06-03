@@ -7,7 +7,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@NamedEntityGraph(name = "bannedTermWithBannedTermLogs", attributeNodes = @NamedAttributeNode("bannedTermLogs"))
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
@@ -24,12 +27,6 @@ public class BannedTerm {
     private Long coupleId;
 
     /**
-     * 채팅방 아이디
-     */
-    @Column(name = "chat_room_id")
-    private Long chatRoomId;
-
-    /**
      * 금지어 등록한 사람
      */
     @Column(name = "writer_member_id")
@@ -39,6 +36,9 @@ public class BannedTerm {
      * 금지어 내용
      */
     private String name;
+
+    @OneToMany(mappedBy = "bannedTerm")
+    private List<BannedTermLog> bannedTermLogs = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "created_at")
