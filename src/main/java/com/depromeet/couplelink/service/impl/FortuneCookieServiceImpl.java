@@ -115,7 +115,7 @@ public class FortuneCookieServiceImpl implements FortuneCookieService {
         if (couple.getMembers().stream()
                 .map(Member::getId)
                 .noneMatch(id -> id.equals(memberId))) {
-            throw new ApiFailedException("Cookie not found", HttpStatus.NOT_FOUND);
+            throw new ApiFailedException("Couple not found", HttpStatus.NOT_FOUND);
         }
         return couple;
     }

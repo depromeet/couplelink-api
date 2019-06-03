@@ -6,6 +6,7 @@ import com.depromeet.couplelink.entity.FortuneCookieReceipt;
 import com.depromeet.couplelink.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class FortuneCookieAssembler {
     private final MemberAssembler memberAssembler;
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public FortuneCookieResponse assembleFortuneCookieResponse(FortuneCookie fortuneCookie) {
         final FortuneCookieResponse fortuneCookieResponse = new FortuneCookieResponse();
         fortuneCookieResponse.setId(fortuneCookie.getId());

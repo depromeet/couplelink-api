@@ -1,13 +1,11 @@
 package com.depromeet.couplelink.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
-@ToString
+@Data
 public class BannedTermResponse {
     /**
      * 금지어 아이디
@@ -28,14 +26,14 @@ public class BannedTermResponse {
     private MemberResponse writerMemberResponse;
 
     /**
-     * 금지어 지킬 사람
-     */
-    @JsonProperty("receiver")
-    private MemberResponse receiverMemberResponse;
-
-    /**
      * 금지어 작성 시간
      */
     @JsonProperty("createdAt")
     private LocalDateTime createdAt;
+
+    /**
+     * 금지어 어긴 횟수
+     */
+    @JsonProperty("count")
+    private Integer count;
 }

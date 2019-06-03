@@ -1,6 +1,7 @@
 package com.depromeet.couplelink.helper;
 
 import com.depromeet.couplelink.adapter.KakaoAdapter;
+import com.depromeet.couplelink.dto.BannedTermRequest;
 import com.depromeet.couplelink.dto.CoupleRequest;
 import com.depromeet.couplelink.dto.LoginRequest;
 import com.depromeet.couplelink.dto.UpdateCoupleMemberRequest;
@@ -60,5 +61,11 @@ public final class TestHelper {
         ReflectionTestUtils.setField(request, "birthDate", birthDate);
         ReflectionTestUtils.setField(request, "startedAt", startedAt);
         return request;
+    }
+
+    public static BannedTermRequest createBannedTermRequest(String name) {
+        final BannedTermRequest bannedTermRequest = new BannedTermRequest();
+        ReflectionTestUtils.setField(bannedTermRequest, "name", name);
+        return bannedTermRequest;
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import static com.depromeet.couplelink.helper.TestHelper.createCoupleRequest;
+import static com.depromeet.couplelink.helper.TestHelper.createLoginRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -64,11 +65,11 @@ public class CreateCoupleTest {
     public void 커플_생성_성공() throws Exception {
         // given
         // 1번 유저 가입
-        final TestApiResult<LoginResponse> loginResult1 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken1"));
+        final TestApiResult<LoginResponse> loginResult1 = loginControllerApi.login(createLoginRequest("kakaoToken1"));
         assertThat(loginResult1.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken1 = loginResult1.getBody().getAccessToken();
         // 2번 유저 가입
-        final TestApiResult<LoginResponse> loginResult2 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken2"));
+        final TestApiResult<LoginResponse> loginResult2 = loginControllerApi.login(createLoginRequest("kakaoToken2"));
         assertThat(loginResult2.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken2 = loginResult2.getBody().getAccessToken();
         // 2번 유저 정보 조회
@@ -89,11 +90,11 @@ public class CreateCoupleTest {
     public void 연결하려는_멤버_중_내가_커플인경우_커플_생성_실패() throws Exception {
         // given
         // 1번 유저 가입
-        final TestApiResult<LoginResponse> loginResult1 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken1"));
+        final TestApiResult<LoginResponse> loginResult1 = loginControllerApi.login(createLoginRequest("kakaoToken1"));
         assertThat(loginResult1.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken1 = loginResult1.getBody().getAccessToken();
         // 2번 유저 가입
-        final TestApiResult<LoginResponse> loginResult2 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken2"));
+        final TestApiResult<LoginResponse> loginResult2 = loginControllerApi.login(createLoginRequest("kakaoToken2"));
         assertThat(loginResult2.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken2 = loginResult2.getBody().getAccessToken();
         // 2번 유저 정보 조회
@@ -104,7 +105,7 @@ public class CreateCoupleTest {
         커플_생성(accessToken1, memberId2);
 
         // 3번 유저 가입
-        final TestApiResult<LoginResponse> loginResult3 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken3"));
+        final TestApiResult<LoginResponse> loginResult3 = loginControllerApi.login(createLoginRequest("kakaoToken3"));
         assertThat(loginResult3.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken3 = loginResult3.getBody().getAccessToken();
         // 3번 유저 정보 조회
@@ -129,15 +130,15 @@ public class CreateCoupleTest {
     public void 연결하려는_멤버_중_상대가_커플인경우_커플_생성_실패() throws Exception {
         // given
         // 1번 유저 가입
-        final TestApiResult<LoginResponse> loginResult1 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken1"));
+        final TestApiResult<LoginResponse> loginResult1 = loginControllerApi.login(createLoginRequest("kakaoToken1"));
         assertThat(loginResult1.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken1 = loginResult1.getBody().getAccessToken();
         // 2번 유저 가입
-        final TestApiResult<LoginResponse> loginResult2 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken2"));
+        final TestApiResult<LoginResponse> loginResult2 = loginControllerApi.login(createLoginRequest("kakaoToken2"));
         assertThat(loginResult2.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken2 = loginResult2.getBody().getAccessToken();
         // 3번 유저 가입
-        final TestApiResult<LoginResponse> loginResult3 = loginControllerApi.login(TestHelper.createLoginRequest("kakaoToken3"));
+        final TestApiResult<LoginResponse> loginResult3 = loginControllerApi.login(createLoginRequest("kakaoToken3"));
         assertThat(loginResult3.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final String accessToken3 = loginResult3.getBody().getAccessToken();
         // 3번 유저 정보 조회

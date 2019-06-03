@@ -1,5 +1,6 @@
 package com.depromeet.couplelink.helper;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,17 @@ public class TestApiResult<T> {
         T result;
         try {
             result = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), clazz);
+        } catch (IOException ex) {
+            result = null;
+        }
+        this.body = result;
+    }
+
+    public TestApiResult(MvcResult mvcResult, ObjectMapper objectMapper, TypeReference<T> valueTypeRef) {
+        this.httpStatus = HttpStatus.valueOf(mvcResult.getResponse().getStatus());
+        T result;
+        try {
+            result = objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), valueTypeRef);
         } catch (IOException ex) {
             result = null;
         }
