@@ -1,6 +1,8 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.5.RELEASE'
 	id 'java'
+	id "org.sonarqube" version "2.6"
+	id 'jacoco'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -37,4 +39,16 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	compile group: 'com.auth0', name: 'java-jwt', version: '3.7.0'
+}
+
+jacoco {
+	toolVersion = "0.8.3"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.enabled false
+	}
 }
