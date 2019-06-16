@@ -43,9 +43,9 @@ public final class TestHelper {
         return loginRequest;
     }
 
-    public static CoupleRequest createCoupleRequest(Long memberId) {
+    public static CoupleRequest createCoupleRequest(String connectionNumber) {
         final CoupleRequest coupleRequest = new CoupleRequest();
-        ReflectionTestUtils.setField(coupleRequest, "memberId", memberId);
+        ReflectionTestUtils.setField(coupleRequest, "connectionNumber", connectionNumber);
         return coupleRequest;
     }
 

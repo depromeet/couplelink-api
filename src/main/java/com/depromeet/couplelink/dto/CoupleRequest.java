@@ -10,9 +10,9 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class CoupleRequest {
     /**
-     * 상대방 회원 번호
+     * 상대방 연결 번호
      */
-    @JsonProperty("memberId")
+    @JsonProperty("connectionNumber")
     @NotNull
-    private Long memberId;
+    private String connectionNumber;
 }

@@ -33,8 +33,8 @@ public class CoupleController {
     public CoupleResponse createCouple(@ApiIgnore @RequestAttribute Long memberId,
                                        @RequestHeader("Authorization") String authorization,
                                        @RequestBody @Valid CoupleRequest coupleRequest) {
-        final Long targetMemberId = coupleRequest.getMemberId();
-        final Couple couple = coupleService.createCouple(memberId, targetMemberId);
+        final String connectionNumber = coupleRequest.getConnectionNumber();
+        final Couple couple = coupleService.createCouple(memberId, connectionNumber);
         return coupleAssembler.assembleCoupleResponse(couple);
     }
 
