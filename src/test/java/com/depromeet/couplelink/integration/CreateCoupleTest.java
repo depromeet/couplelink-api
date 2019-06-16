@@ -75,11 +75,11 @@ public class CreateCoupleTest {
         // 2번 유저 정보 조회
         final TestApiResult<MemberResponse> getInfoResult = memberControllerApi.getMe(accessToken2);
         assertThat(getInfoResult.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        final Long memberId2 = getInfoResult.getBody().getId();
+        final String connectionNumber3 = getInfoResult.getBody().getConnectionNumber();
 
         // when
         final CoupleRequest coupleRequest = new CoupleRequest();
-        ReflectionTestUtils.setField(coupleRequest, "memberId", memberId2);
+        ReflectionTestUtils.setField(coupleRequest, "connectionNumber", connectionNumber3);
         final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, coupleRequest);
 
         // then
@@ -100,9 +100,9 @@ public class CreateCoupleTest {
         // 2번 유저 정보 조회
         final TestApiResult<MemberResponse> getInfoResult2 = memberControllerApi.getMe(accessToken2);
         assertThat(getInfoResult2.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        final Long memberId2 = getInfoResult2.getBody().getId();
+        final String connectionNumber = getInfoResult2.getBody().getConnectionNumber();
         // 1번, 2번 커플 생성
-        커플_생성(accessToken1, memberId2);
+        커플_생성(accessToken1, connectionNumber);
 
         // 3번 유저 가입
         final TestApiResult<LoginResponse> loginResult3 = loginControllerApi.login(createLoginRequest("kakaoToken3"));
@@ -111,17 +111,17 @@ public class CreateCoupleTest {
         // 3번 유저 정보 조회
         final TestApiResult<MemberResponse> getInfoResult3 = memberControllerApi.getMe(accessToken3);
         assertThat(getInfoResult3.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        final Long memberId3 = getInfoResult3.getBody().getId();
+        final String connectionNumber3 = getInfoResult3.getBody().getConnectionNumber();
 
         // when
         // 1번, 3번 커플 생성 요청
-        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(memberId3));
+        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(connectionNumber3));
         // then
         assertThat(createCoupleResult.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
-    private void 커플_생성(String accessToken, Long memberId) throws Exception {
-        final CoupleRequest coupleRequest = createCoupleRequest(memberId);
+    private void 커플_생성(String accessToken, String connectionNumber) throws Exception {
+        final CoupleRequest coupleRequest = createCoupleRequest(connectionNumber);
         final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken, coupleRequest);
         assertThat(createCoupleResult.getHttpStatus()).isEqualTo(HttpStatus.CREATED);
     }
@@ -144,12 +144,12 @@ public class CreateCoupleTest {
         // 3번 유저 정보 조회
         final TestApiResult<MemberResponse> getInfoResult3 = memberControllerApi.getMe(accessToken3);
         assertThat(getInfoResult3.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        final Long memberId3 = getInfoResult3.getBody().getId();
+        final String connectionNumber3 = getInfoResult3.getBody().getConnectionNumber();
         // 2,3번 커플 생성
-        커플_생성(accessToken2, memberId3);
+        커플_생성(accessToken2, connectionNumber3);
         // when
         // 1,3번 커플 생성 요청
-        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(memberId3));
+        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(connectionNumber3));
         // then
         assertThat(createCoupleResult.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
     }

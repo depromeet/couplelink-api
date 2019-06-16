@@ -7,7 +7,6 @@ import com.depromeet.couplelink.entity.Member;
 import com.depromeet.couplelink.entity.MemberDetail;
 import com.depromeet.couplelink.exception.ApiFailedException;
 import com.depromeet.couplelink.repository.CoupleRepository;
-import com.depromeet.couplelink.repository.MemberDetailRepository;
 import com.depromeet.couplelink.repository.MemberRepository;
 import com.depromeet.couplelink.service.CoupleService;
 import lombok.RequiredArgsConstructor;
@@ -23,18 +22,17 @@ import java.util.Optional;
 public class CoupleServiceImpl implements CoupleService {
     private final MemberRepository memberRepository;
     private final CoupleRepository coupleRepository;
-    private final MemberDetailRepository memberDetailRepository;
 
     @Override
     @Transactional
-    public Couple createCouple(Long memberId, Long targetMemberId) {
+    public Couple createCouple(Long memberId, String connectionNumber) {
         final Member me = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApiFailedException("Member not found. memberId:" + memberId, HttpStatus.NOT_FOUND));
         if (!me.isSolo()) {
             throw new ApiFailedException("Member is already couple. memberId:" + me.getId(), HttpStatus.BAD_REQUEST);
         }
-        final Member you = memberRepository.findById(targetMemberId)
-                .orElseThrow(() -> new ApiFailedException("Member not found. memberId:" + targetMemberId, HttpStatus.NOT_FOUND));
+        final Member you = memberRepository.findByConnectionNumber(connectionNumber)
+                .orElseThrow(() -> new ApiFailedException("Member not found. connectionNumber:" + connectionNumber, HttpStatus.NOT_FOUND));
         if (!you.isSolo()) {
             throw new ApiFailedException("Member is already couple. memberId:" + you.getId(), HttpStatus.BAD_REQUEST);
         }

@@ -4,7 +4,7 @@ import com.depromeet.couplelink.dto.UpdateCoupleMemberRequest;
 import com.depromeet.couplelink.entity.Couple;
 
 public interface CoupleService {
-    Couple createCouple(Long memberId, Long targetMemberId);
+    Couple createCouple(Long memberId, String connectionNumber);
 
     Couple createOrUpdateMemberDetail(Long memberId, Long coupleId, UpdateCoupleMemberRequest updateCoupleMemberRequest);
 }

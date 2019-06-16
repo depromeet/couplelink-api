@@ -69,9 +69,9 @@ public class UpdateCoupleMemberTest {
         // 2번 유저 정보 조회
         final TestApiResult<MemberResponse> getInfoResult2 = memberControllerApi.getMe(accessToken2);
         assertThat(getInfoResult2.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        final Long memberId2 = getInfoResult2.getBody().getId();
+        final String connectionNumber = getInfoResult2.getBody().getConnectionNumber();
         // 1,2번 커플 생성
-        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(memberId2));
+        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(connectionNumber));
         assertThat(createCoupleResult.getHttpStatus().is2xxSuccessful()).isTrue();
         final Long coupleId = createCoupleResult.getBody().getId();
         // when
@@ -96,9 +96,9 @@ public class UpdateCoupleMemberTest {
         // 2번 유저 정보 조회
         final TestApiResult<MemberResponse> getInfoResult2 = memberControllerApi.getMe(accessToken2);
         assertThat(getInfoResult2.getHttpStatus()).isEqualTo(HttpStatus.OK);
-        final Long memberId2 = getInfoResult2.getBody().getId();
+        final String connectionNumber = getInfoResult2.getBody().getConnectionNumber();
         // 1,2번 커플 생성
-        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(memberId2));
+        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(connectionNumber));
         assertThat(createCoupleResult.getHttpStatus().is2xxSuccessful()).isTrue();
         final Long coupleId = createCoupleResult.getBody().getId();
         // when

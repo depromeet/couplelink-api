@@ -43,7 +43,7 @@ public interface CoupleTestBase {
         assertThat(getInfoResult2.getHttpStatus()).isEqualTo(HttpStatus.OK);
         final MemberResponse memberResponse2 = getInfoResult2.getBody();
         // 1,2번 커플 생성
-        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(memberResponse2.getId()));
+        final TestApiResult<CoupleResponse> createCoupleResult = coupleControllerApi.createCouple(accessToken1, createCoupleRequest(memberResponse2.getConnectionNumber()));
         assertThat(createCoupleResult.getHttpStatus().is2xxSuccessful()).isTrue();
         final CoupleResponse coupleResponse = createCoupleResult.getBody();
         // 1번 유저 정보 입력
