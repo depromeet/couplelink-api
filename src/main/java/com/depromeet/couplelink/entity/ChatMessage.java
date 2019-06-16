@@ -33,8 +33,9 @@ public class ChatMessage {
     /**
      * 메시지 보낸 사람
      */
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "writer_member_id")
+    private Member writerMember;
 
     /**
      * 메시지 내용
