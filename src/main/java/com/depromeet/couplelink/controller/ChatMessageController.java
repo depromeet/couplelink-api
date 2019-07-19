@@ -2,6 +2,7 @@ package com.depromeet.couplelink.controller;
 
 import com.depromeet.couplelink.dto.ChatMessageRequest;
 import com.depromeet.couplelink.dto.ChatMessageResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller
+@Slf4j
 public class ChatMessageController {
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger();
 
@@ -32,6 +34,7 @@ public class ChatMessageController {
 
     @MessageMapping("/couples/{coupleId}/rooms/{roomId}/messages")
     @SendTo("/topic/couples/{coupleId}/rooms/{roomId}")
+    @ResponseBody
     public ChatMessageResponse sendMessage(@DestinationVariable Long coupleId,
                                            @DestinationVariable Long roomId,
                                            @RequestBody @Valid ChatMessageRequest chatMessageRequest) {
