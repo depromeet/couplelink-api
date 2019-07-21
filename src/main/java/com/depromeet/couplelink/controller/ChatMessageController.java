@@ -1,7 +1,9 @@
 package com.depromeet.couplelink.controller;
 
+import com.depromeet.couplelink.adapter.WebSocketAdapter;
 import com.depromeet.couplelink.dto.ChatMessageRequest;
 import com.depromeet.couplelink.dto.ChatMessageResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -15,20 +17,26 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Controller
 @Slf4j
+@Controller
+@RequiredArgsConstructor
 public class ChatMessageController {
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger();
+
+    private final WebSocketAdapter webSocketAdapter;
 
     @PostMapping("/api/couples/{coupleId}/rooms/{roomId}/messages")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public ChatMessageResponse createMessage(@ApiIgnore @RequestAttribute Long memberId,
-                                             @RequestHeader("Authorization") String authorization,
+    public ChatMessageResponse createMessage(
+//            @ApiIgnore @RequestAttribute Long memberId,
+//                                             @RequestHeader("Authorization") String authorization,
                                              @PathVariable Long coupleId,
                                              @PathVariable Long roomId,
                                              @RequestBody @Valid ChatMessageRequest chatMessageRequest) {
         // TODO: HTTP 요청으로 채팅 메시지 보내면, 해당 채팅방에 전송되어야함.
+        webSocketAdapter.send(coupleId, roomId, chatMessageRequest);
+        webSocketAdapter.sendByClient(coupleId, roomId, chatMessageRequest);
         return new ChatMessageResponse();
     }
 
