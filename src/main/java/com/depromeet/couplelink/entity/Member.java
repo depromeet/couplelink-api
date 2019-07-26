@@ -47,8 +47,7 @@ public class Member {
     /**
      * 멤버 상세 정보
      */
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "member")
-    private MemberDetail memberDetail;
+    private Long memberDetailId;
 
     @CreatedDate
     @Column(name = "created_at")
