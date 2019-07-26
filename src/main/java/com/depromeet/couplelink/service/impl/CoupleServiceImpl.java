@@ -69,11 +69,12 @@ public class CoupleServiceImpl implements CoupleService {
         memberDetail.setProfileImageUrl(updateCoupleMemberRequest.getProfileImageUrl());
         memberDetail.parseBirthDate(updateCoupleMemberRequest.getBirthDate());
 
+        memberDetailRepository.save(memberDetail);
         member.setMemberDetail(memberDetail);
         memberRepository.save(member);
-        memberDetailRepository.save(memberDetail);
         couple.parseStartedAt(updateCoupleMemberRequest.getStartedAt());
         couple.updateConnectionStatus();
+        coupleRepository.save(couple);
         return couple;
     }
 
