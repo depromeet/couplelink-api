@@ -2,10 +2,12 @@ package com.depromeet.couplelink.service.impl;
 
 import com.depromeet.couplelink.entity.BannedTerm;
 import com.depromeet.couplelink.entity.BannedTermLog;
+import com.depromeet.couplelink.entity.Couple;
 import com.depromeet.couplelink.model.IndexRange;
 import com.depromeet.couplelink.repository.BannedTermLogRepository;
 import com.depromeet.couplelink.repository.BannedTermRepository;
 import com.depromeet.couplelink.service.ChatMessageFilterService;
+import com.depromeet.couplelink.service.CoupleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ public class ChatMessageFilterServiceImpl implements ChatMessageFilterService {
 
     private final BannedTermRepository bannedTermRepository;
     private final BannedTermLogRepository bannedTermLogRepository;
+    private final CoupleService coupleService;
 
     /**
      * 이 사용자를 기준으로 적용되어야할 금지어를 불러온다.
@@ -36,7 +39,9 @@ public class ChatMessageFilterServiceImpl implements ChatMessageFilterService {
             return Collections.emptyList();
         }
 
-        List<BannedTerm> bannedTerms = bannedTermRepository.findByCoupleIdAndWriterMemberId(coupleId, writerMemberId);
+        Couple couple = coupleService.getCouple(coupleId);
+        Long bannedTermWriterMemberId = couple.getYourMemberId(writerMemberId);
+        List<BannedTerm> bannedTerms = bannedTermRepository.findByCoupleIdAndWriterMemberId(coupleId, bannedTermWriterMemberId);
 
         List<IndexRange> indexRanges = new ArrayList<>();
 
