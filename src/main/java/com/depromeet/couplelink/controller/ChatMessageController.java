@@ -66,6 +66,7 @@ public class ChatMessageController {
         List<IndexRange> indexRanges = chatMessageFilterService.filter(
                 coupleId,
                 chatMessageRequest.getMemberId(),
+                chatMessage.getId(),
                 chatMessageRequest.getMessage()
         );
         return chatMessageAssembler.assembleChatMessageResponse(chatMessage, indexRanges);

@@ -19,6 +19,7 @@ public class ChatMessageAssembler {
         chatMessageResponse.setWriter(memberAssembler.assembleMemberResponse(chatMessage.getWriterMember()));
         chatMessageResponse.setBannedIndexRange(indexRanges);
         chatMessageResponse.setCreatedAt(chatMessage.getCreatedAt());
+        chatMessageResponse.setMessage(chatMessage.getMessage());
         return chatMessageResponse;
     }
 }

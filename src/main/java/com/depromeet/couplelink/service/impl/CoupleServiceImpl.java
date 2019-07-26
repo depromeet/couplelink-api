@@ -74,7 +74,7 @@ public class CoupleServiceImpl implements CoupleService {
         member.setMemberDetailId(memberDetail.getId());
         memberRepository.save(member);
         couple.parseStartedAt(updateCoupleMemberRequest.getStartedAt());
-        couple.updateConnectionStatus();
+        couple.updateConnectionStatus(memberDetailRepository);
         return coupleRepository.save(couple);
     }
 
