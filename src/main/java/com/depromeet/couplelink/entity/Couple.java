@@ -1,6 +1,7 @@
 package com.depromeet.couplelink.entity;
 
 import com.depromeet.couplelink.model.stereotype.ConnectionStatus;
+import com.depromeet.couplelink.repository.MemberDetailRepository;
 import com.depromeet.couplelink.util.DateTimeUtils;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -57,12 +58,12 @@ public class Couple {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public void updateConnectionStatus() {
+    public void updateConnectionStatus(MemberDetailRepository memberDetailRepository) {
         if (connectionStatus == ConnectionStatus.CONNECTED) {
             return;
         }
         long numberOfMemberDetails = members.stream()
-                .map(Member::getMemberDetail)
+                .map(member -> memberDetailRepository.findByMemberId(member.getId()).orElse(null))
                 .filter(Objects::nonNull)
                 .count();
         if (numberOfMemberDetails == 2L) {
