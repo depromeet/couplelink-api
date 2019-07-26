@@ -2,6 +2,9 @@ package com.depromeet.couplelink.controller;
 
 import com.depromeet.couplelink.dto.ChatMessageRequest;
 import com.depromeet.couplelink.dto.ChatMessageResponse;
+import com.depromeet.couplelink.model.IndexRange;
+import com.depromeet.couplelink.service.ChatMessageFilterService;
+import lombok.RequiredArgsConstructor;
 import com.depromeet.couplelink.dto.MemberResponse;
 import com.depromeet.couplelink.model.MemberStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +19,17 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class ChatMessageController {
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger();
     private static final Random RANDOM = new Random();
+
+    private final ChatMessageFilterService chatMessageFilterService;
 
     @PostMapping("/api/couples/{coupleId}/rooms/{roomId}/messages")
     @ResponseBody
@@ -48,6 +55,8 @@ public class ChatMessageController {
         chatMessageResponse.setMessage(chatMessageRequest.getMessage());
         chatMessageResponse.setCreatedAt(LocalDateTime.now());
         chatMessageResponse.setWriter(createRandomMember());
+        List<IndexRange> indexRanges = chatMessageFilterService.filter(coupleId, chatMessageRequest.getMemberId(), chatMessageRequest.getMessage());
+        chatMessageResponse.setBannedIndexRange(indexRanges);
         return chatMessageResponse;
     }
 

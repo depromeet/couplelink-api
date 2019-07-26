@@ -1,6 +1,7 @@
 package com.depromeet.couplelink.dto;
 
 import com.depromeet.couplelink.model.stereotype.ConnectionStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -31,6 +32,7 @@ public class CoupleResponse {
      * 기념일 (사귄날)
      */
     @JsonProperty("startedAt")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime startedAt;
 
     /**

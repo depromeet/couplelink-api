@@ -10,4 +10,6 @@ import javax.validation.constraints.NotNull;
 public class ChatMessageRequest {
     @NotNull
     private String message;
+
+    private Long memberId;
 }
