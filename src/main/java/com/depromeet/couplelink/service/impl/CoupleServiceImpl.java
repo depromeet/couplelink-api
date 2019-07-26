@@ -62,20 +62,31 @@ public class CoupleServiceImpl implements CoupleService {
                 .filter(m -> memberId.equals(m.getId()))
                 .findFirst()
                 .orElseThrow(() -> new ApiFailedException("Member not found from couple. memberId:" + memberId + ", coupleId: " + coupleId, HttpStatus.BAD_REQUEST));
-        final MemberDetail memberDetail = memberDetailRepository.findById(member.getMemberDetailId())
-                .orElseGet(() -> {
-                    MemberDetail createdMemberDetail = new MemberDetail();
-                    createdMemberDetail.setName(updateCoupleMemberRequest.getName());
-                    createdMemberDetail.setGenderType(updateCoupleMemberRequest.getGenderType());
-                    createdMemberDetail.setProfileImageUrl(updateCoupleMemberRequest.getProfileImageUrl());
-                    createdMemberDetail.parseBirthDate(updateCoupleMemberRequest.getBirthDate());
-                    return memberDetailRepository.save(createdMemberDetail);
-                });
+
+        final MemberDetail memberDetail = getOrCreateMemberDetail(member, updateCoupleMemberRequest);
         member.setMemberDetailId(memberDetail.getId());
         memberRepository.save(member);
         couple.parseStartedAt(updateCoupleMemberRequest.getStartedAt());
         couple.updateConnectionStatus(memberDetailRepository);
         return coupleRepository.save(couple);
+    }
+
+    private MemberDetail createMemberDetail(UpdateCoupleMemberRequest updateCoupleMemberRequest) {
+        MemberDetail memberDetail = new MemberDetail();
+        memberDetail.setName(updateCoupleMemberRequest.getName());
+        memberDetail.setGenderType(updateCoupleMemberRequest.getGenderType());
+        memberDetail.setProfileImageUrl(updateCoupleMemberRequest.getProfileImageUrl());
+        memberDetail.parseBirthDate(updateCoupleMemberRequest.getBirthDate());
+        return memberDetailRepository.save(memberDetail);
+    }
+
+    private MemberDetail getOrCreateMemberDetail(Member member, UpdateCoupleMemberRequest updateCoupleMemberRequest) {
+        Long memberDetailId = member.getMemberDetailId();
+        if (memberDetailId == null) {
+            return this.createMemberDetail(updateCoupleMemberRequest);
+        }
+        return memberDetailRepository.findById(memberDetailId)
+                .orElse(this.createMemberDetail(updateCoupleMemberRequest));
     }
 
     @Override
