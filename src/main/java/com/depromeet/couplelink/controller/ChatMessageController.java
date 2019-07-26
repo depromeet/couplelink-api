@@ -19,6 +19,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,6 +31,15 @@ public class ChatMessageController {
     private static final Random RANDOM = new Random();
 
     private final ChatMessageFilterService chatMessageFilterService;
+
+    @GetMapping("/api/couples/{coupleId}/rooms/{roomId}/messages")
+    @ResponseBody
+    public List<ChatMessageResponse> getMessages(@ApiIgnore @RequestAttribute Long memberId,
+                                                 @RequestHeader("Authorization") String authorization,
+                                                 @PathVariable Long coupleId,
+                                                 @PathVariable Long roomId) {
+        return Collections.emptyList();
+    }
 
     @PostMapping("/api/couples/{coupleId}/rooms/{roomId}/messages")
     @ResponseBody
