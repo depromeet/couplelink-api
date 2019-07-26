@@ -1,13 +1,11 @@
 package com.depromeet.couplelink.dto;
 
 import com.depromeet.couplelink.model.stereotype.GenderType;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -41,5 +39,5 @@ public class UpdateCoupleMemberRequest {
      */
     @JsonProperty("startedAt")
     @NotNull
-    private LocalDateTime startedAt;
+    private String startedAt;
 }

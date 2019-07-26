@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +19,8 @@ import java.util.Objects;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public class Couple {
+    private static final DateTimeFormatter BIRTH_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "couple_id")
@@ -76,5 +79,9 @@ public class Couple {
                 .filter(id -> !myMemberId.equals(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void parseStartedAt(String startedAt) {
+        this.startedAt = LocalDateTime.from(BIRTH_DATE_FORMATTER.parse(startedAt));
     }
 }
