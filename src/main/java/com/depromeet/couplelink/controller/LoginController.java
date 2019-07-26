@@ -1,6 +1,5 @@
 package com.depromeet.couplelink.controller;
 
-import com.depromeet.couplelink.assembler.MemberAssembler;
 import com.depromeet.couplelink.component.JwtFactory;
 import com.depromeet.couplelink.dto.LoginRequest;
 import com.depromeet.couplelink.dto.LoginResponse;

@@ -22,6 +22,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         request.setAttribute("memberId", memberId);
-        return true;
+        return super.preHandle(request, response, handler);
     }
 }
