@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -71,8 +73,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public MemberDetail getMemberDetailById(Long memberId) {
-        return memberDetailRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new ApiFailedException("Member not found.", HttpStatus.NOT_FOUND));
+    public Optional<MemberDetail> getMemberDetailById(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member == null) {
+            return Optional.empty();
+        }
+        Long memberDetailId = member.getMemberDetailId();
+        if (memberDetailId == null) {
+            return Optional.empty();
+        }
+        return memberDetailRepository.findById(memberDetailId);
     }
 }

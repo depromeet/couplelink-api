@@ -3,6 +3,8 @@ package com.depromeet.couplelink.service;
 import com.depromeet.couplelink.entity.Member;
 import com.depromeet.couplelink.entity.MemberDetail;
 
+import java.util.Optional;
+
 public interface MemberService {
     Member getOrCreateMember(String accessToken);
 
@@ -10,5 +12,5 @@ public interface MemberService {
 
     Member getMemberForConnecting(Long memberId, String connectionNumber);
 
-    MemberDetail getMemberDetailById(Long memberId);
+    Optional<MemberDetail> getMemberDetailById(Long memberId);
 }

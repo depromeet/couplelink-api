@@ -2,8 +2,6 @@ package com.depromeet.couplelink.assembler;
 
 import com.depromeet.couplelink.dto.MemberResponse;
 import com.depromeet.couplelink.entity.Member;
-import com.depromeet.couplelink.entity.MemberDetail;
-import com.depromeet.couplelink.exception.ApiFailedException;
 import com.depromeet.couplelink.model.MemberStatus;
 import com.depromeet.couplelink.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +24,12 @@ public class MemberAssembler {
         memberResponse.setCoupleId(member.getCoupleId().orElse(null));
         memberResponse.setMemberStatus(memberResponse.getCoupleId() == null ? MemberStatus.SOLO : MemberStatus.COUPLE);
 
-        try {
-            final MemberDetail memberDetail = memberService.getMemberDetailById(member.getId());
-            memberResponse.setName(memberDetail.getName());
-            memberResponse.setProfileImageUrl(memberDetail.getProfileImageUrl());
-            memberResponse.setBirthDate(memberDetail.getBirthDate());
-        } catch (ApiFailedException ex) {
-            log.warn("memberDetail not found", ex);
-        }
+        memberService.getMemberDetailById(member.getId())
+                .ifPresent(memberDetail -> {
+                    memberResponse.setName(memberDetail.getName());
+                    memberResponse.setProfileImageUrl(memberDetail.getProfileImageUrl());
+                    memberResponse.setBirthDate(memberDetail.getBirthDate());
+                });
         return memberResponse;
     }
 }
