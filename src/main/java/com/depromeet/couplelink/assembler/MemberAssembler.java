@@ -21,6 +21,7 @@ public class MemberAssembler {
         final MemberDetail memberDetail = member.getMemberDetail();
         memberResponse.setName(memberDetail != null ? memberDetail.getName() : null);
         memberResponse.setProfileImageUrl(memberDetail != null ? memberDetail.getProfileImageUrl() : null);
+        memberResponse.setBirthDate(memberDetail != null ? memberDetail.getBirthDate() : null);
         return memberResponse;
     }
 }

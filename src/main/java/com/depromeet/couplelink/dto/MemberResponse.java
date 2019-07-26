@@ -1,8 +1,11 @@
 package com.depromeet.couplelink.dto;
 
 import com.depromeet.couplelink.model.MemberStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 public class MemberResponse {
@@ -41,4 +44,11 @@ public class MemberResponse {
      */
     @JsonProperty("coupleId")
     private Long coupleId;
+
+    /**
+     * 생일
+     */
+    @JsonProperty("birthDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDateTime birthDate;
 }

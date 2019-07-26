@@ -28,7 +28,7 @@ public class UpdateCoupleMemberRequest {
      */
     @JsonProperty("birthDate")
     @NotNull
-    private LocalDateTime birthDate;
+    private String birthDate;
     /**
      * 프로필 이미지 url
      */

@@ -9,6 +9,7 @@ import com.depromeet.couplelink.helper.*;
 import com.depromeet.couplelink.repository.BannedTermRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @Transactional
 @AutoConfigureMockMvc
+@Ignore
 public class BannedTermTest implements CoupleTestBase {
     private static final String BANNED_TERM_01 = "금지어1";
     private static final String BANNED_TERM_02 = "금지어2";

@@ -8,11 +8,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public class MemberDetail {
+    private static final DateTimeFormatter BIRTH_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "member_detail_id")
@@ -56,4 +59,8 @@ public class MemberDetail {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public void parseBirthDate(String birthDate) {
+        this.birthDate = LocalDateTime.from(BIRTH_DATE_FORMATTER.parse(birthDate));
+    }
 }

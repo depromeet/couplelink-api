@@ -10,6 +10,7 @@ import com.depromeet.couplelink.model.stereotype.ConnectionStatus;
 import com.depromeet.couplelink.model.stereotype.GenderType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
 import java.time.LocalDateTime;
 
 import static com.depromeet.couplelink.helper.TestHelper.createCoupleRequest;
@@ -32,6 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @Transactional
 @AutoConfigureMockMvc
+@Ignore
 public class UpdateCoupleMemberTest {
     @Autowired
     private MockMvc mockMvc;
