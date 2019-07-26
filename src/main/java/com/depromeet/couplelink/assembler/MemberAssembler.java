@@ -3,9 +3,12 @@ package com.depromeet.couplelink.assembler;
 import com.depromeet.couplelink.dto.MemberResponse;
 import com.depromeet.couplelink.entity.Member;
 import com.depromeet.couplelink.entity.MemberDetail;
+import com.depromeet.couplelink.model.IndexRange;
 import com.depromeet.couplelink.model.MemberStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import java.util.List;
 
 @Component
 public class MemberAssembler {

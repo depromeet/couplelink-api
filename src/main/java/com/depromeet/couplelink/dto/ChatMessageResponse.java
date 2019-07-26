@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class ChatMessageResponse {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("writer")
     private MemberResponse writer;
