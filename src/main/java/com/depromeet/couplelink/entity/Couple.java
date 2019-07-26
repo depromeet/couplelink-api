@@ -1,6 +1,7 @@
 package com.depromeet.couplelink.entity;
 
 import com.depromeet.couplelink.model.stereotype.ConnectionStatus;
+import com.depromeet.couplelink.util.DateTimeUtils;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,7 +10,6 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,8 +19,6 @@ import java.util.Objects;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public class Couple {
-    private static final DateTimeFormatter BIRTH_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "couple_id")
@@ -82,6 +80,6 @@ public class Couple {
     }
 
     public void parseStartedAt(String startedAt) {
-        this.startedAt = LocalDateTime.from(BIRTH_DATE_FORMATTER.parse(startedAt));
+        this.startedAt = DateTimeUtils.parseDate(startedAt);
     }
 }
