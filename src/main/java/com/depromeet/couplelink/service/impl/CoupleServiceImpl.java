@@ -76,7 +76,7 @@ public class CoupleServiceImpl implements CoupleService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = true)
     public Couple getCouple(Long coupleId) {
         return coupleRepository.findById(coupleId).orElseThrow(() -> new ApiFailedException("Couple not found", HttpStatus.NOT_FOUND));
     }
