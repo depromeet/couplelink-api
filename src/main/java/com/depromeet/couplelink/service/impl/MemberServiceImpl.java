@@ -3,8 +3,10 @@ package com.depromeet.couplelink.service.impl;
 import com.depromeet.couplelink.adapter.KakaoAdapter;
 import com.depromeet.couplelink.dto.kakao.KakaoUserResponse;
 import com.depromeet.couplelink.entity.Member;
+import com.depromeet.couplelink.entity.MemberDetail;
 import com.depromeet.couplelink.entity.ProviderType;
 import com.depromeet.couplelink.exception.ApiFailedException;
+import com.depromeet.couplelink.repository.MemberDetailRepository;
 import com.depromeet.couplelink.repository.MemberRepository;
 import com.depromeet.couplelink.service.ConnectionNumberCreationService;
 import com.depromeet.couplelink.service.MemberService;
@@ -14,14 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final KakaoAdapter kakaoAdapter;
     private final MemberRepository memberRepository;
     private final ConnectionNumberCreationService connectionNumberCreationService;
+    private final MemberDetailRepository memberDetailRepository;
 
     @Override
     @Transactional
@@ -66,5 +67,12 @@ public class MemberServiceImpl implements MemberService {
             throw new ApiFailedException("It is not allowed to connect with myself", HttpStatus.BAD_REQUEST);
         }
         return member;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MemberDetail getMemberDetailById(Long memberId) {
+        return memberDetailRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new ApiFailedException("Member not found.", HttpStatus.NOT_FOUND));
     }
 }
