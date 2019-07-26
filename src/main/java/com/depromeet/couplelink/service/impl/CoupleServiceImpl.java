@@ -8,6 +8,7 @@ import com.depromeet.couplelink.entity.MemberDetail;
 import com.depromeet.couplelink.exception.ApiFailedException;
 import com.depromeet.couplelink.repository.ChatRoomRepository;
 import com.depromeet.couplelink.repository.CoupleRepository;
+import com.depromeet.couplelink.repository.MemberDetailRepository;
 import com.depromeet.couplelink.repository.MemberRepository;
 import com.depromeet.couplelink.service.CoupleService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class CoupleServiceImpl implements CoupleService {
     private final MemberRepository memberRepository;
     private final CoupleRepository coupleRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final MemberDetailRepository memberDetailRepository;
 
     @Override
     @Transactional
@@ -69,6 +71,7 @@ public class CoupleServiceImpl implements CoupleService {
 
         member.setMemberDetail(memberDetail);
         memberRepository.save(member);
+        memberDetailRepository.save(memberDetail);
         couple.parseStartedAt(updateCoupleMemberRequest.getStartedAt());
         couple.updateConnectionStatus();
         return couple;
