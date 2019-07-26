@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,5 +67,17 @@ public class CoupleServiceImpl implements CoupleService {
         couple.parseStartedAt(updateCoupleMemberRequest.getStartedAt());
         couple.updateConnectionStatus();
         return couple;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Couple> getCouples() {
+        return coupleRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Couple getCouple(Long coupleId) {
+        return coupleRepository.findById(coupleId).orElseThrow(() -> new ApiFailedException("Couple not found", HttpStatus.NOT_FOUND));
     }
 }

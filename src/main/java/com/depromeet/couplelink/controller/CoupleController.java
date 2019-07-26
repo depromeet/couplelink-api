@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,7 +50,21 @@ public class CoupleController {
     public CoupleResponse getCouple(@ApiIgnore @RequestAttribute Long memberId,
                                     @RequestHeader("Authorization") String authorization,
                                     @PathVariable Long coupleId) {
-        return new CoupleResponse();
+        Couple couple = coupleService.getCouple(coupleId);
+        return coupleAssembler.assembleCoupleResponse(couple);
+    }
+
+    /**
+     * 커플 목록 조회
+     */
+    @GetMapping("/api/couples")
+    public List<CoupleResponse> getCouples(@ApiIgnore @RequestAttribute Long memberId,
+                                           @RequestHeader("Authorization") String authorization,
+                                           @PathVariable Long coupleId) {
+        return coupleService.getCouples()
+                .stream()
+                .map(coupleAssembler::assembleCoupleResponse)
+                .collect(Collectors.toList());
     }
 
     /**

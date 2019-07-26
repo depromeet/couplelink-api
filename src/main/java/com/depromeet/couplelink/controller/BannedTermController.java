@@ -29,9 +29,16 @@ public class BannedTermController {
                                                    @RequestHeader("Authorization") String authorization,
                                                    @PathVariable Long coupleId,
                                                    @RequestParam(defaultValue = "0") Integer page,
-                                                   @RequestParam(defaultValue = "20") Integer size) {
+                                                   @RequestParam(defaultValue = "20") Integer size,
+                                                   @RequestParam(defaultValue = "0", name = "writerId") Long writerId) {
         final Pageable pageable = PageRequest.of(page, size);
         return bannedTermService.getBannedTerms(memberId, coupleId, pageable).stream()
+                .filter(bannedTerm -> {
+                    if (writerId == 0L) {
+                        return true;
+                    }
+                    return bannedTerm.getWriterMemberId().equals(writerId);
+                })
                 .map(bannedTermAssembler::assembleBannedTermResponse)
                 .collect(Collectors.toList());
     }

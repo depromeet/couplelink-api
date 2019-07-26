@@ -6,6 +6,7 @@ import com.depromeet.couplelink.entity.Member;
 import com.depromeet.couplelink.entity.ProviderType;
 import com.depromeet.couplelink.exception.ApiFailedException;
 import com.depromeet.couplelink.repository.MemberRepository;
+import com.depromeet.couplelink.service.ConnectionNumberCreationService;
 import com.depromeet.couplelink.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class MemberServiceImpl implements MemberService {
     private final KakaoAdapter kakaoAdapter;
     private final MemberRepository memberRepository;
+    private final ConnectionNumberCreationService connectionNumberCreationService;
 
     @Override
     @Transactional
@@ -33,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByProviderTypeAndProviderUserId(ProviderType.KAKAO, providerUserId)
                 .orElseGet(() -> {
                     final Member member = new Member();
-                    member.setConnectionNumber(UUID.randomUUID().toString());
+                    member.setConnectionNumber(connectionNumberCreationService.create());
                     member.setProviderType(ProviderType.KAKAO);
                     member.setProviderUserId(providerUserId);
                     return memberRepository.save(member);
