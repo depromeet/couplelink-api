@@ -1,7 +1,9 @@
 package com.depromeet.couplelink.service.impl;
 
 import com.depromeet.couplelink.entity.BannedTerm;
+import com.depromeet.couplelink.entity.BannedTermLog;
 import com.depromeet.couplelink.model.IndexRange;
+import com.depromeet.couplelink.repository.BannedTermLogRepository;
 import com.depromeet.couplelink.repository.BannedTermRepository;
 import com.depromeet.couplelink.service.ChatMessageFilterService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ChatMessageFilterServiceImpl implements ChatMessageFilterService {
 
     private final BannedTermRepository bannedTermRepository;
+    private final BannedTermLogRepository bannedTermLogRepository;
 
     /**
      * 이 사용자를 기준으로 적용되어야할 금지어를 불러온다.
@@ -27,8 +30,8 @@ public class ChatMessageFilterServiceImpl implements ChatMessageFilterService {
      * @return 금지되어야할 부분
      */
     @Override
-    @Transactional(readOnly = true)
-    public List<IndexRange> filter(Long coupleId, Long writerMemberId, String message) {
+    @Transactional
+    public List<IndexRange> filter(Long coupleId, Long writerMemberId, Long chatMessageId, String message) {
         if (writerMemberId == null) {
             return Collections.emptyList();
         }
@@ -45,6 +48,12 @@ public class ChatMessageFilterServiceImpl implements ChatMessageFilterService {
             if (result < 0) {
                 continue;
             }
+            BannedTermLog bannedTermLog = new BannedTermLog();
+            bannedTermLog.setCoupleId(coupleId);
+            bannedTermLog.setBannedTerm(bannedTerm);
+            bannedTermLog.setChatMessageId(chatMessageId);
+            bannedTermLogRepository.save(bannedTermLog);
+
             IndexRange indexRange = new IndexRange();
             indexRange.setStartIndex(result);
             indexRange.setEndIndex(result + bannedWord.length());

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,11 +34,18 @@ public class BannedTermServiceImpl implements BannedTermService {
         this.checkAuthority(memberId, coupleId);
 
         return bannedTermRepository.findByCoupleIdAndName(coupleId, bannedTermRequest.getName())
+                .map(bannedTerm -> {
+                    if (bannedTerm.getDeleted()) {
+                        bannedTerm.setDeleted(false);
+                    }
+                    return bannedTerm;
+                })
                 .orElseGet(() -> {
                     final BannedTerm bannedTerm = new BannedTerm();
                     bannedTerm.setCoupleId(coupleId);
                     bannedTerm.setName(bannedTermRequest.getName());
                     bannedTerm.setWriterMemberId(memberId);
+                    bannedTerm.setDeleted(false);
                     return bannedTermRepository.save(bannedTerm);
                 });
     }
@@ -51,7 +59,9 @@ public class BannedTermServiceImpl implements BannedTermService {
 
         this.checkAuthority(memberId, coupleId);
 
-        return bannedTermRepository.findByCoupleId(coupleId, pageable).getContent();
+        return bannedTermRepository.findByCoupleId(coupleId, pageable).stream()
+                .filter(BannedTerm::isNotDeleted)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -64,6 +74,7 @@ public class BannedTermServiceImpl implements BannedTermService {
         this.checkAuthority(memberId, coupleId);
 
         return bannedTermRepository.findByIdAndCoupleId(termId, coupleId)
+                .filter(BannedTerm::isNotDeleted)
                 .orElseThrow(() -> new ApiFailedException("BannedTerm not found. coupleId: " + coupleId + "termId: " + termId, HttpStatus.NOT_FOUND));
     }
 
@@ -77,7 +88,11 @@ public class BannedTermServiceImpl implements BannedTermService {
         this.checkAuthority(memberId, coupleId);
 
         bannedTermRepository.findByIdAndCoupleId(termId, coupleId)
-                .ifPresent(bannedTermRepository::delete);
+                .filter(BannedTerm::isNotDeleted)
+                .ifPresent(bannedTerm -> {
+                    bannedTerm.setDeleted(true);
+                    bannedTermRepository.save(bannedTerm);
+                });
     }
 
     private Couple checkAuthority(Long memberId, Long coupleId) {

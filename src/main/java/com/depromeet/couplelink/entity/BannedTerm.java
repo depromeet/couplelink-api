@@ -37,6 +37,11 @@ public class BannedTerm {
      */
     private String name;
 
+    /**
+     * 삭제 여부
+     */
+    private Boolean deleted;
+
     @OneToMany(mappedBy = "bannedTerm")
     private List<BannedTermLog> bannedTermLogs = new ArrayList<>();
 
@@ -47,4 +52,8 @@ public class BannedTerm {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Boolean isNotDeleted() {
+        return !deleted;
+    }
 }
