@@ -1,9 +1,12 @@
 package com.depromeet.couplelink.controller;
 
+import com.depromeet.couplelink.assembler.MemberAssembler;
 import com.depromeet.couplelink.dto.ChatMessageRequest;
 import com.depromeet.couplelink.dto.ChatMessageResponse;
+import com.depromeet.couplelink.entity.Member;
 import com.depromeet.couplelink.model.IndexRange;
 import com.depromeet.couplelink.service.ChatMessageFilterService;
+import com.depromeet.couplelink.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import com.depromeet.couplelink.dto.MemberResponse;
 import com.depromeet.couplelink.model.MemberStatus;
@@ -31,6 +34,8 @@ public class ChatMessageController {
     private static final Random RANDOM = new Random();
 
     private final ChatMessageFilterService chatMessageFilterService;
+    private final MemberService memberService;
+    private final MemberAssembler memberAssembler;
 
     @GetMapping("/api/couples/{coupleId}/rooms/{roomId}/messages")
     @ResponseBody
@@ -64,29 +69,12 @@ public class ChatMessageController {
         chatMessageResponse.setId(ATOMIC_INTEGER.incrementAndGet());
         chatMessageResponse.setMessage(chatMessageRequest.getMessage());
         chatMessageResponse.setCreatedAt(LocalDateTime.now());
-        chatMessageResponse.setWriter(createRandomMember());
+
+        Member member = memberService.getMemberById(chatMessageRequest.getMemberId());
+        chatMessageResponse.setWriter(memberAssembler.assembleMemberResponse(member));
+
         List<IndexRange> indexRanges = chatMessageFilterService.filter(coupleId, chatMessageRequest.getMemberId(), chatMessageRequest.getMessage());
         chatMessageResponse.setBannedIndexRange(indexRanges);
         return chatMessageResponse;
-    }
-
-    private MemberResponse createRandomMember() {
-        MemberResponse one = new MemberResponse();
-        one.setId(1L);
-        one.setName("여우");
-        one.setCoupleId(0L);
-        one.setConnectionNumber("123456");
-        one.setMemberStatus(MemberStatus.COUPLE);
-        one.setProfileImageUrl("profileImageUrl");
-
-        MemberResponse theOther = new MemberResponse();
-        theOther.setId(2L);
-        theOther.setName("두루미");
-        theOther.setCoupleId(0L);
-        theOther.setConnectionNumber("654321");
-        theOther.setMemberStatus(MemberStatus.COUPLE);
-        theOther.setProfileImageUrl("profileImageUrl");
-
-        return RANDOM.nextBoolean() ? one : theOther;
     }
 }
