@@ -6,6 +6,7 @@ import com.depromeet.couplelink.entity.Couple;
 import com.depromeet.couplelink.entity.Member;
 import com.depromeet.couplelink.entity.MemberDetail;
 import com.depromeet.couplelink.exception.ApiFailedException;
+import com.depromeet.couplelink.repository.ChatRoomRepository;
 import com.depromeet.couplelink.repository.CoupleRepository;
 import com.depromeet.couplelink.repository.MemberRepository;
 import com.depromeet.couplelink.service.CoupleService;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class CoupleServiceImpl implements CoupleService {
     private final MemberRepository memberRepository;
     private final CoupleRepository coupleRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     @Override
     @Transactional
@@ -45,6 +47,8 @@ public class CoupleServiceImpl implements CoupleService {
         coupleRepository.save(couple);
         me.setCouple(couple);
         you.setCouple(couple);
+        chatRoom.setCouple(couple);
+        chatRoomRepository.save(chatRoom);
         return couple;
     }
 
